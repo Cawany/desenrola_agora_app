@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.pluggy.ai/pluggy-connect/latest/pluggy-connect.js"></script>
+</head>
+<body style="margin:0;padding:0;">
+<script>
+  function iniciarConexao(connectToken) {
+    try {
+      if (typeof PluggyConnect === 'undefined') {
+        window.webkit.messageHandlers.pluggyBridge.postMessage({
+          evento: 'erro',
+          mensagem: 'O script da Pluggy nao carregou (sem internet ou URL do CDN errada).'
+        });
+        return;
+      }
+
+      const pluggyConnect = new PluggyConnect({
+        connectToken: connectToken,
+        includeSandbox: true,
+        onSuccess: function (itemData) {
+          window.webkit.messageHandlers.pluggyBridge.postMessage({
+            evento: 'sucesso',
+            itemId: itemData.item.id
+          });
+        },
+        onError: function (error) {
+          var msg = (error && error.message) ? error.message : String(error);
+          window.webkit.messageHandlers.pluggyBridge.postMessage({ evento: 'erro', mensagem: msg });
+        },
+        onClose: function () {
+          window.webkit.messageHandlers.pluggyBridge.postMessage({ evento: 'fechar' });
+        }
+      });
+
+      pluggyConnect.init();
+    } catch (e) {
+      window.webkit.messageHandlers.pluggyBridge.postMessage({
+        evento: 'erro',
+        mensagem: 'Falha ao iniciar o widget: ' + e.message
+      });
+    }
+  }
+</script>
+</body>
+</html>
