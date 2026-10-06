@@ -1,19 +1,8 @@
 import Foundation
 
-// MARK: - Autenticação (PluggyApi.kt)
+// MARK: - Transações
 
-struct PluggyAuthRequest: Encodable {
-    let clientId: String
-    let clientSecret: String
-}
-
-struct PluggyAuthResponse: Decodable {
-    let apiKey: String
-}
-
-// MARK: - Transações (PluggyAuthResponse.kt no Android — nome do arquivo mantido por herança histórica, os DTOs de transação vivem lá)
-
-struct PluggyTransacaoDto: Decodable {
+nonisolated struct PluggyTransacaoDto: Decodable, Sendable {
     let id: String
     let description: String
     let amount: Double
@@ -22,44 +11,42 @@ struct PluggyTransacaoDto: Decodable {
     let paymentData: PluggyPaymentDataDto?
 }
 
-struct PluggyPaymentDataDto: Decodable {
+nonisolated struct PluggyPaymentDataDto: Decodable, Sendable {
     let paymentMethod: String?
 }
 
-struct PluggyTransacaoResponse: Decodable {
+nonisolated struct PluggyTransacaoResponse: Decodable, Sendable {
     let results: [PluggyTransacaoDto]
 }
 
-// MARK: - Connect Token / Contas (PluggyConnectTokenRequest.kt)
+// MARK: - Connect Token / Contas
 
-struct PluggyConnectTokenRequest: Encodable {
+nonisolated struct PluggyConnectTokenRequest: Encodable, Sendable {
     let clientUserId: String?
 }
 
-struct PluggyConnectTokenResponse: Decodable {
+nonisolated struct PluggyConnectTokenResponse: Decodable, Sendable {
     let accessToken: String
 }
 
-struct PluggyContaDto: Decodable {
+nonisolated struct PluggyContaDto: Decodable, Sendable {
     let id: String
     let type: String
     let subtype: String?
     let name: String
 }
 
-struct PluggyContasResponse: Decodable {
+nonisolated struct PluggyContasResponse: Decodable, Sendable {
     let results: [PluggyContaDto]
 }
 
 // MARK: - Mapeamento DTO -> modelo do app
 
 extension PluggyTransacaoDto {
-    /// Equivalente à função de extensão privada `PluggyTransacaoDto.paraTransacao()`
-    /// do `PluggyTransacaoRepository.kt`.
     func paraTransacao(userId: String) -> Transacao {
         let formatoData = DateFormatter()
         formatoData.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-        formatoData.locale = Locale(identifier: "en_US_POSIX") // equivalente ao Locale.US do Kotlin
+        formatoData.locale = Locale(identifier: "en_US_POSIX")
         formatoData.timeZone = TimeZone(identifier: "UTC")
 
         let dataEmMillis: Int64

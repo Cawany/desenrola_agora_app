@@ -1,10 +1,8 @@
 import SwiftUI
 import FirebaseAuth
 
-/// Equivalente à `TelaHome.kt` já com os ajustes da Aula 10: engrenagem em
-/// vez de carteira (abre `SettingsView`), sincronização usando as contas
-/// persistidas no Firestore em vez do `accountId` fixo, e sem o botão
-/// "Conectar novo banco" solto (agora vive nas Configurações).
+/// Tela principal do aplicativo com resumo de gastos, gráficos por categoria,
+/// últimas transações e botão para disparar sincronização com o Pluggy.
 struct HomeView: View {
     let viewModel: TransacaoViewModel
     let authViewModel: AuthViewModel
@@ -110,12 +108,8 @@ struct HomeView: View {
                 let firebaseRepository = FirebaseTransacaoRepository()
                 var totalSincronizado = 0
 
-                // Uma conta hoje, várias no futuro — o loop já suporta as
-                // duas situações, igual do lado Android.
                 for conta in contas {
                     let pluggyRepository = PluggyTransacaoRepository(
-                        clientId: Secrets.pluggyClientId,
-                        clientSecret: Secrets.pluggyClientSecret,
                         accountId: conta.accountId,
                         userId: Auth.auth().currentUser?.uid
                     )

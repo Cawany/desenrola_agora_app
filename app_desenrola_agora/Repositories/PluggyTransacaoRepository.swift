@@ -21,38 +21,24 @@ enum PluggyRepositoryError: LocalizedError {
     }
 }
 
-/// Equivalente ao `PluggyTransacaoRepository.kt`.
+/// Implementação do repositório de transações do Pluggy.
+/// Todas as requisições são delegadas ao `PluggyBackendClient` (Firebase Cloud Functions v2)
+/// garantindo que nenhuma credencial ou API token exista no dispositivo do usuário.
 final class PluggyTransacaoRepository: TransacaoRepository {
-    private let clientId: String
-    private let clientSecret: String
     private let accountId: String
     private let userId: String?
 
-    init(clientId: String, clientSecret: String, accountId: String, userId: String?) {
-        self.clientId = clientId
-        self.clientSecret = clientSecret
+    init(accountId: String, userId: String?) {
         self.accountId = accountId
         self.userId = userId
     }
 
-    /// Nota: no Kotlin isso é um `flow { emit(...) }` que produz UM valor só
-    /// (diferente do `callbackFlow` do Firestore, que fica escutando pra
-    /// sempre). O equivalente fiel aqui é um `AsyncThrowingStream` que faz
-    /// `yield` uma única vez e termina — inclusive terminando com erro
-    /// quando a requisição falha, que é exatamente o que permite ao
-    /// `SicronizadorPluggy` (e ao `TransacaoViewModel`) saberem que algo deu
-    /// errado, em vez de silenciosamente ver uma lista vazia.
     func observarTransacoes() -> AsyncThrowingStream<[Transacao], Error> {
         AsyncThrowingStream { continuation in
             Task {
                 do {
-                    let apiKey = try await PluggyAPIClient.shared.autenticar(
-                        clientId: clientId, clientSecret: clientSecret
-                    )
-                    let dtos = try await PluggyAPIClient.shared.buscarTransacoes(
-                        apiKey: apiKey, accountId: accountId
-                    )
-                    let transacoes = dtos.map { $0.paraTransacao(userId: userId ?? "") }
+                    let dtos = try await PluggyBackendClient.shared.buscarTransacoes(accountId: self.accountId)
+                    let transacoes = dtos.map { $0.paraTransacao(userId: self.userId ?? "") }
                     continuation.yield(transacoes)
                     continuation.finish()
                 } catch let erro as PluggyHTTPError {

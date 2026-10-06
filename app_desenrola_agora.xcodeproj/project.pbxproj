@@ -6,8 +6,14 @@
 	objectVersion = 110;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		C0E873CB305DC37D00F21E5D /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = C0E873CA305DC37D00F21E5D /* FirebaseAuth */; };
+		C0E873CD305DC37E00F21E5D /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = C0E873CC305DC37E00F21E5D /* FirebaseFirestore */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		C0E8735C305DBFC200F21E5D /* app_desenrola_agora.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = app_desenrola_agora.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C0E873D0305DC6B200F21E5D /* app-desenrola-agora-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "app-desenrola-agora-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -22,6 +28,8 @@
 		C0E87359305DBFC200F21E5D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			files = (
+				C0E873CB305DC37D00F21E5D /* FirebaseAuth in Frameworks */,
+				C0E873CD305DC37E00F21E5D /* FirebaseFirestore in Frameworks */,
 			);
 		};
 /* End PBXFrameworksBuildPhase section */
@@ -30,6 +38,7 @@
 		C0E87353305DBFC200F21E5D = {
 			isa = PBXGroup;
 			children = (
+				C0E873D0305DC6B200F21E5D /* app-desenrola-agora-Info.plist */,
 				C0E8735E305DBFC200F21E5D /* app_desenrola_agora */,
 				C0E8735D305DBFC200F21E5D /* Products */,
 			);
@@ -60,6 +69,10 @@
 				C0E8735E305DBFC200F21E5D /* app_desenrola_agora */,
 			);
 			name = app_desenrola_agora;
+			packageProductDependencies = (
+				C0E873CA305DC37D00F21E5D /* FirebaseAuth */,
+				C0E873CC305DC37E00F21E5D /* FirebaseFirestore */,
+			);
 			productName = app_desenrola_agora;
 			productReference = C0E8735C305DBFC200F21E5D /* app_desenrola_agora.app */;
 			productType = "com.apple.product-type.application";
@@ -88,6 +101,9 @@
 			);
 			mainGroup = C0E87353305DBFC200F21E5D;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				C0E873C9305DC37D00F21E5D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = C0E8735D305DBFC200F21E5D /* Products */;
 			projectDirPath = "";
@@ -117,6 +133,8 @@
 /* Begin XCBuildConfiguration section */
 		C0E87365305DBFC400F21E5D /* Debug configuration for PBXProject "app_desenrola_agora" */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = C0E8735E305DBFC200F21E5D /* app_desenrola_agora */;
+			baseConfigurationReferenceRelativePath = "Config/Config-Secrets.xcconfig";
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -180,6 +198,8 @@
 		};
 		C0E87366305DBFC400F21E5D /* Release configuration for PBXProject "app_desenrola_agora" */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = C0E8735E305DBFC200F21E5D /* app_desenrola_agora */;
+			baseConfigurationReferenceRelativePath = "Config/Config-Secrets.xcconfig";
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -241,8 +261,10 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "app-desenrola-agora-Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -272,8 +294,10 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "app-desenrola-agora-Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -316,6 +340,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C0E873C9305DC37D00F21E5D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.19.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C0E873CA305DC37D00F21E5D /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C0E873C9305DC37D00F21E5D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		C0E873CC305DC37E00F21E5D /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C0E873C9305DC37D00F21E5D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C0E87354305DBFC200F21E5D /* Project object */;
 	validationLevel = 1;

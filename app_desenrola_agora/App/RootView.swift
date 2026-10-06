@@ -1,16 +1,6 @@
 import SwiftUI
 
-/// Equivalente ao corpo do `setContent { ... }` do `MainActivity.kt` — o
-/// "grafo de navegação" do app inteiro.
-///
-/// Nota de arquitetura: não uso `NavigationStack` como navegação principal
-/// aqui, de propósito. `NavigationStack` é para navegação hierárquica
-/// (empilhar/desempilhar telas relacionadas); o que o `NavHost` do Android
-/// fazia era trocar entre ABAS (Home/Transações/Dashboard/Categoria) — isso
-/// é mais fielmente representado por um estado simples de rota selecionada
-/// (igual eu já expliquei na `BottomNavigationBar`). A `ConectarBanco`, que
-/// no Android também vivia dentro do mesmo `NavHost`, aqui vira um
-/// `.fullScreenCover` — ela é um fluxo modal (widget web), não uma aba.
+/// Grafo de navegação principal do aplicativo.
 struct RootView: View {
     @State private var authViewModel: AuthViewModel
     @State private var transacaoViewModel: TransacaoViewModel
@@ -65,14 +55,9 @@ struct RootView: View {
                         aoConectarComSucesso: { itemId in
                             Task {
                                 do {
-                                    let apiKey = try await PluggyAPIClient.shared.autenticar(
-                                        clientId: Secrets.pluggyClientId,
-                                        clientSecret: Secrets.pluggyClientSecret
-                                    )
-                                    
                                     var contas: [PluggyContaDto] = []
                                     for _ in 0..<3 {
-                                        contas = try await PluggyAPIClient.shared.buscarContas(apiKey: apiKey, itemId: itemId)
+                                        contas = try await PluggyBackendClient.shared.buscarContas(itemId: itemId)
                                         if !contas.isEmpty { break }
                                         try await Task.sleep(nanoseconds: 1_000_000_000)
                                     }

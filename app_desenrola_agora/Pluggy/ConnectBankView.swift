@@ -2,7 +2,7 @@ import SwiftUI
 import WebKit
 import FirebaseAuth
 
-/// Equivalente à `TelaConectarBanco.kt`.
+/// Tela para conexão de novas contas bancárias via widget Pluggy Connect.
 struct ConnectBankView: View {
     let aoConectarComSucesso: (String) -> Void
     let aoFechar: () -> Void
@@ -32,32 +32,16 @@ struct ConnectBankView: View {
         .task { await prepararConexao() }
     }
 
-    /// Equivalente ao `LaunchedEffect(Unit)` do Android: `.task { }` roda
-    /// uma única vez quando a View aparece, e é cancelado automaticamente
-    /// se a View sair de tela — o Swift Concurrency resolve sozinho o que
-    /// o Android precisava do `coroutineScope` pra cuidar manualmente.
     private func prepararConexao() async {
         do {
-            let apiKey = try await PluggyAPIClient.shared.autenticar(
-                clientId: Secrets.pluggyClientId,
-                clientSecret: Secrets.pluggyClientSecret
-            )
-            // Equivalente exato ao FirebaseAuth.getInstance().currentUser?.uid.
             let uid = Auth.auth().currentUser?.uid
-
-            connectToken = try await PluggyAPIClient.shared.criarConnectToken(
-                apiKey: apiKey,
-                clientUserId: uid
-            )
+            connectToken = try await PluggyBackendClient.shared.gerarConnectToken(clientUserId: uid)
         } catch {
             erro = "Erro ao preparar conexão: \(error.localizedDescription)"
         }
     }
 }
 
-/// Equivalente ao `AndroidView { WebView(...) }`. `UIViewRepresentable` é a
-/// ponte oficial do SwiftUI para Views do UIKit — o mesmo papel que o
-/// `AndroidView` cumpre para Views antigas do Android.
 private struct PluggyWebView: UIViewRepresentable {
     let connectToken: String
     let aoConectar: (String) -> Void
@@ -96,7 +80,6 @@ private struct PluggyWebView: UIViewRepresentable {
             self.connectToken = connectToken
         }
 
-        /// Equivalente ao `onPageFinished` + `evaluateJavascript(...)`.
         func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
             webView.evaluateJavaScript("iniciarConexao('\(connectToken)')")
         }
